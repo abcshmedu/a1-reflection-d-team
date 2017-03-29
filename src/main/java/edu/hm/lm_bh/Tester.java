@@ -16,6 +16,8 @@ public class Tester {
             System.out.println(r.render());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

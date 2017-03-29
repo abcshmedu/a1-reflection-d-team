@@ -1,18 +1,14 @@
 package edu.hm.lm_bh;
-
-import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * Created by Lukas on 29.03.2017.
  */
-public class ArrayRenderer{
+public class ArrayRenderer implements CustomRenderTemplate<int[]>{
     public ArrayRenderer() {
     }
 
-    String render(Object target) throws IllegalAccessException {
-        Class targetClass = target.getClass();
-        String output = new String("Instance of " + targetClass.getCanonicalName()+ ":\r\n");
-
-        return output;
+    public String render(int[] value) throws IllegalAccessException {
+        return Arrays.toString(value);
     }
 }

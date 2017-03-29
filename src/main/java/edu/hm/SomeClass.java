@@ -13,7 +13,7 @@ public class SomeClass {
     private int foo;
     @RenderMe
     private Date date = new Date(123456789);
-    @RenderMe(with="edu.hm.renderer.ArrayRenderer")
+    @RenderMe(with="edu.hm.lm_bh.ArrayRenderer")
     int[] array = {1, 2, 3};
 
 
