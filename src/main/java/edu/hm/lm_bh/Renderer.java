@@ -35,7 +35,7 @@ public class Renderer{
                         try {
                                Object innerTarget = varRenderer.getConstructor().newInstance();
                                Object o = field.get(target);
-                               Method methode = varRenderer.getMethod("render",field.get(target).getClass());
+                               Method methode = varRenderer.getMethod("render",Object.class);
                                 inneroutput = (String)methode.invoke(innerTarget,field.get(target));
 
                             } catch (InstantiationException e) {
