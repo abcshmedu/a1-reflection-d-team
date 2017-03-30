@@ -2,6 +2,8 @@ package edu.hm.lm_bh;
 
 import edu.hm.SomeClass;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Small Testable main method.
  * Used for quick debugging.
@@ -27,6 +29,8 @@ public class Tester {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
     }

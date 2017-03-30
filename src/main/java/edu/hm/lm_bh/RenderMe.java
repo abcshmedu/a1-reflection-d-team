@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author Heunke Sebastian, heunke@hm.edu
  * @version 29.03.2017
  */
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RenderMe {
 

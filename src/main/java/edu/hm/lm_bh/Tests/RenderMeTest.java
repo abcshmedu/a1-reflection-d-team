@@ -4,6 +4,8 @@ import edu.hm.lm_bh.RenderMe;
 import edu.hm.lm_bh.Renderer;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -50,12 +52,29 @@ public class RenderMeTest {
     }
 
     /**
+     * Test class with a single method.
+     */
+    private class ClassD {
+        @RenderMe
+        public int aMethod(){return 42;}
+    }
+
+    /**
+     * Test class with a multiple methods.
+     */
+    private class ClassE {
+        @RenderMe
+        private String aMethod(){return "Hello there!";}
+        @RenderMe(with = "edu.hm.lm_bh.ArrayRenderer")
+        private int[] arrayMethod(){return new int[]{42,42,42,42};}
+    }
+    /**
      * Simple int output.
      * @throws ClassNotFoundException fails test
      * @throws IllegalAccessException fails test
      */
     @Test
-    public void simpleIntOutputWorks() throws ClassNotFoundException, IllegalAccessException {
+    public void simpleIntOutputWorks() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException {
         Renderer sot = new Renderer(new ClassA());
         String result = sot.render();
         String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassA:\n"
@@ -69,7 +88,7 @@ public class RenderMeTest {
      * @throws IllegalAccessException fails test
      */
     @Test
-    public void arrayOutputWorks() throws ClassNotFoundException, IllegalAccessException {
+    public void arrayOutputWorks() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException {
         Renderer sot = new Renderer(new ClassB());
         String result = sot.render();
         String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassB:\n"
@@ -83,7 +102,7 @@ public class RenderMeTest {
      * @throws IllegalAccessException fails test
      */
     @Test
-    public void multipleElementsInClass() throws ClassNotFoundException, IllegalAccessException {
+    public void multipleElementsInClass() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException {
         Renderer sot = new Renderer(new ClassC());
         String result = sot.render();
         String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassC:\n"
@@ -93,5 +112,38 @@ public class RenderMeTest {
                 + "myStrings (class [Ljava.lang.String;): [StringArray]\n";
         assertEquals(expected, result);
 
+    }
+
+    /**
+     * Tests rendering of methods.
+     * @throws IllegalAccessException fails test
+     * @throws InvocationTargetException fails test
+     * @throws ClassNotFoundException fails test
+     */
+    @Test
+    public void methodGetsRendered() throws IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        Renderer sot = new Renderer(new ClassD());
+        String result = sot.render();
+        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassD:\n"
+                + "aMethod (int): 42\n";
+
+        assertEquals(expected,result);
+    }
+
+    /**
+     * Tests rendering of multiple methods.
+     * @throws IllegalAccessException fails test
+     * @throws InvocationTargetException fails test
+     * @throws ClassNotFoundException fails test
+     */
+    @Test
+    public void multipleMethodGetsRendered() throws IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        Renderer sot = new Renderer(new ClassE());
+        String result = sot.render();
+        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassE:\n"
+                + "aMethod (class java.lang.String): Hello there!\n"
+                + "arrayMethod (class [I): [42,42,42,42]\n";
+
+        assertEquals(expected,result);
     }
 }
