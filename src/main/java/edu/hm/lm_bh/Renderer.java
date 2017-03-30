@@ -5,13 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Lab01 Software Architektur
- *
+ * Renderer class to wrap Object in.
+ * Wraps a Object and give the ability to render it
+ * into a user readable string.
  * @author Lukas
  * @author Heunke Sebastian, heunke@hm.edu
  * @version 29.03.2017
  */
-
 public class Renderer {
     private final Object target;
 
@@ -19,6 +19,13 @@ public class Renderer {
         this.target = target;
     }
 
+    /**
+     * Render method to display target.
+     * Uses the target and creates a readable string output.
+     * @return readable string
+     * @throws IllegalAccessException Access denied
+     * @throws ClassNotFoundException non valid class
+     */
     @SuppressWarnings("unchecked")
     public String render() throws IllegalAccessException, ClassNotFoundException {
         Class targetClass = target.getClass();
