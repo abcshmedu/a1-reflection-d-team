@@ -3,7 +3,10 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
- * Created by Lukas on 29.03.2017.
+ * Lab01 Software Architektur
+ * @version 29.03.2017
+ * @author Lukas
+ * @author Heunke Sebastian, heunke@hm.edu
  */
 public class ArrayRenderer implements CustomRenderTemplate{
 
@@ -11,11 +14,14 @@ public class ArrayRenderer implements CustomRenderTemplate{
     }
 
     public String render(Object value) throws IllegalAccessException {
-        String output = "";
-        for(int i= 0; i < Array.getLength(value); i++){
-            System.out.println(Array.get(value,i));
+        int length = Array.getLength(value);
+        String output = "[";
+        for(int i= 0; i < length; i++){
             output += Array.get(value,i);
+            if(i+1 < length)
+                output += ',';
         }
+        output += ']';
         return output;
     }
 }

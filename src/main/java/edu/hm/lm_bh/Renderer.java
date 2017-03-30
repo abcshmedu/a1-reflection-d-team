@@ -1,15 +1,16 @@
 package edu.hm.lm_bh;
 
-import edu.hm.lm_bh.RenderMe;
-
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by Lukas on 29.03.2017.
+ * Lab01 Software Architektur
+ * @version 29.03.2017
+ * @author Lukas
+ * @author Heunke Sebastian, heunke@hm.edu
  */
+
 public class Renderer{
     private final Object target;
 
@@ -17,12 +18,14 @@ public class Renderer{
         this.target = target;
     }
 
+    @SuppressWarnings("unchecked")
     public String render() throws IllegalAccessException, ClassNotFoundException{
         Class targetClass = target.getClass();
-        String output = new String("Instance of " + targetClass.getCanonicalName()+ ":\r\n");
-        String inneroutput = new String();
+        String output = "Instance of " + targetClass.getCanonicalName()+ ":\n"; //First line
 
         for (Field field: targetClass.getDeclaredFields()) {
+            String innerOutput = "";
+
             if (field.getAnnotation(RenderMe.class) != null)
             {
                 field.setAccessible(true);
@@ -36,7 +39,7 @@ public class Renderer{
                                Object innerTarget = varRenderer.getConstructor().newInstance();
                                Object o = field.get(target);
                                Method methode = varRenderer.getMethod("render",Object.class);
-                                inneroutput = (String)methode.invoke(innerTarget,field.get(target));
+                                innerOutput = (String)methode.invoke(innerTarget,field.get(target));
 
                             } catch (InstantiationException e) {
                                 e.printStackTrace();
@@ -48,8 +51,8 @@ public class Renderer{
                     }
                 }
                 Object o = field.get(target);
-                String value = !inneroutput.equals("") ? o.toString() : inneroutput;
-                output += field.getName()+ " (" + field.getGenericType().toString() + "): " + inneroutput + "\r\n";
+                innerOutput = innerOutput.equals("") ? o.toString() : innerOutput;
+                output += field.getName()+ " (" + field.getGenericType().toString() + "): " + innerOutput + "\n";
             }
         }
         return output;
