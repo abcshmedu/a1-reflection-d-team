@@ -54,7 +54,7 @@ public class RenderMeTest {
         String result = sot.render();
         String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassB:\n" +
                 "myArray (class [I): [0,42,0]\n";
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class RenderMeTest {
                 "myArray (class [I): [42,1,2]\n" +
                 "myString (class java.lang.String): test String, pls ignore\n" +
                 "myStrings (class [Ljava.lang.String;): [StringArray]\n";
-        assertEquals(expected,result);
+        assertEquals(expected, result);
 
     }
 }

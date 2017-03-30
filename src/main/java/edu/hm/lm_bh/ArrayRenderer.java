@@ -1,14 +1,15 @@
 package edu.hm.lm_bh;
+
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
 /**
  * Lab01 Software Architektur
- * @version 29.03.2017
+ *
  * @author Lukas
  * @author Heunke Sebastian, heunke@hm.edu
+ * @version 29.03.2017
  */
-public class ArrayRenderer implements CustomRenderTemplate{
+public class ArrayRenderer implements CustomRenderTemplate {
 
     public ArrayRenderer() {
     }
@@ -16,9 +17,9 @@ public class ArrayRenderer implements CustomRenderTemplate{
     public String render(Object value) throws IllegalAccessException {
         int length = Array.getLength(value);
         String output = "[";
-        for(int i= 0; i < length; i++){
-            output += Array.get(value,i);
-            if(i+1 < length)
+        for (int i = 0; i < length; i++) {
+            output += Array.get(value, i);
+            if (i + 1 < length)
                 output += ',';
         }
         output += ']';

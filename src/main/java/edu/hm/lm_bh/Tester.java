@@ -1,12 +1,13 @@
 package edu.hm.lm_bh;
 
 import edu.hm.SomeClass;
-import edu.hm.lm_bh.Renderer;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by Lukas on 29.03.2017.
+ * Lab01 Software Architektur
+ *
+ * @author Lukas
+ * @author Heunke Sebastian, heunke@hm.edu
+ * @version 29.03.2017
  */
 public class Tester {
     public static void main(String[] args) {
