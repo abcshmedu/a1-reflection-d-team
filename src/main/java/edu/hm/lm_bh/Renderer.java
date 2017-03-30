@@ -15,6 +15,10 @@ import java.lang.reflect.Method;
 public class Renderer {
     private final Object target;
 
+    /**
+     * Constructor to assign target.
+     * @param target target to be rendered later
+     */
     public Renderer(Object target) {
         this.target = target;
     }

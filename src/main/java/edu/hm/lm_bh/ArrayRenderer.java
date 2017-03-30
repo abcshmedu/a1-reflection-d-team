@@ -30,7 +30,7 @@ public class ArrayRenderer implements CustomRenderTemplate {
         String output = "[";
         for (int i = 0; i < length; i++) {
             output += Array.get(value, i);
-            if (i+1 < length) {
+            if (i + 1 < length) {
                 output += ',';
             }
         }

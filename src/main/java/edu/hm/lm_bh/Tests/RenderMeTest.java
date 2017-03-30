@@ -58,8 +58,8 @@ public class RenderMeTest {
     public void simpleIntOutputWorks() throws ClassNotFoundException, IllegalAccessException {
         Renderer sot = new Renderer(new ClassA());
         String result = sot.render();
-        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassA:\n" +
-                "myNumber (int): 4\n";
+        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassA:\n"
+                + "myNumber (int): 4\n";
         assertEquals(expected, result);
     }
 
@@ -72,8 +72,8 @@ public class RenderMeTest {
     public void arrayOutputWorks() throws ClassNotFoundException, IllegalAccessException {
         Renderer sot = new Renderer(new ClassB());
         String result = sot.render();
-        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassB:\n" +
-                "myArray (class [I): [0,42,0]\n";
+        String expected = "Instance of edu.hm.lm_bh.Tests.RenderMeTest.ClassB:\n"
+                + "myArray (class [I): [0,42,0]\n";
         assertEquals(expected, result);
     }
 
