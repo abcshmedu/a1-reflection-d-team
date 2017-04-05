@@ -24,14 +24,6 @@ public class Tester {
     public static void main(String[] args) {
         SomeClass someClass = new SomeClass(1);
         Renderer r = new Renderer(someClass);
-        try {
-            System.out.println(r.render());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        System.out.println(r.render());
     }
 }

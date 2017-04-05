@@ -23,9 +23,8 @@ public class ArrayRenderer implements CustomRenderTemplate {
      * and displays them together in a single readable string.
      * @param value Object to be rendered
      * @return Object rendered to a string
-     * @throws IllegalAccessException If permissions are not checked
      */
-    public String render(Object value) throws IllegalAccessException {
+    public String render(Object value){
         int length = Array.getLength(value);
         String output = "[";
         for (int i = 0; i < length; i++) {

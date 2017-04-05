@@ -31,70 +31,76 @@ public class Renderer {
      * @throws ClassNotFoundException non valid class
      */
     @SuppressWarnings("unchecked")
-    public String render() throws IllegalAccessException, ClassNotFoundException, InvocationTargetException {
-        Class targetClass = target.getClass();
-        String output = "Instance of " + targetClass.getCanonicalName() + ":\n"; //First line
+    public String render() {
+        String output = new String();
+        try {
+            Class targetClass = target.getClass();
+           output = "Instance of " + targetClass.getCanonicalName() + ":\n"; //First line
 
-        for (Field field : targetClass.getDeclaredFields()) {
-            String innerOutput = "";//Reset innerOutput
-            if (field.getAnnotation(RenderMe.class) != null) {
-                field.setAccessible(true); //disable private
-                String withParam = field.getAnnotation(RenderMe.class).with();
-                if (!withParam.equals("")) {
-                    //Custom Rendering
-                    Class varRenderer = Class.forName(withParam);
-                    Class implementedClass = varRenderer.getInterfaces()[0];
-                    if (implementedClass == CustomRenderTemplate.class) {
-                        try {
+            for (Field field : targetClass.getDeclaredFields()) {
+                String innerOutput = "";//Reset innerOutput
+                if (field.getAnnotation(RenderMe.class) != null) {
+                    field.setAccessible(true); //disable private
+                    String withParam = field.getAnnotation(RenderMe.class).with();
+                    if (!withParam.equals("")) {
+                        //Custom Rendering
+                        Class varRenderer = Class.forName(withParam);
+                        Class implementedClass = varRenderer.getInterfaces()[0];
+                        if (implementedClass == CustomRenderTemplate.class) {
+
                             Object innerTarget = varRenderer.getConstructor().newInstance();
                             Method methode = varRenderer.getMethod("render", Object.class);
                             innerOutput = (String) methode.invoke(innerTarget, field.get(target));
-
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
                         }
                     }
+                    Object o = field.get(target);
+                    innerOutput = innerOutput.equals("") ? o.toString() : innerOutput;
+                    output += field.getName() + " (" + field.getGenericType().toString() + "): " + innerOutput + "\n";
                 }
-                Object o = field.get(target);
-                innerOutput = innerOutput.equals("") ? o.toString() : innerOutput;
-                output += field.getName() + " (" + field.getGenericType().toString() + "): " + innerOutput + "\n";
             }
-        }
 
-        for(Method method : targetClass.getDeclaredMethods()){
-            String innerOutput = "";
-            if(method.getAnnotation(RenderMe.class) != null && !method.getReturnType().equals(Void.TYPE) && method.getGenericParameterTypes().length == 0){
-                method.setAccessible(true);
-                String withParam = method.getAnnotation(RenderMe.class).with();
-                Object result = method.invoke(target);
-                if (!withParam.equals("")) {
-                    //Custom Rendering
-                    Class varRenderer = Class.forName(withParam);
-                    Class implementedClass = varRenderer.getInterfaces()[0];
-                    if (implementedClass == CustomRenderTemplate.class) {
-                        try {
-                            Object innerTarget = varRenderer.getConstructor().newInstance();
-                            Method methode = varRenderer.getMethod("render", Object.class);
-                            innerOutput = (String) methode.invoke(innerTarget, result);
+            for (Method method : targetClass.getDeclaredMethods()) {
+                String innerOutput = "";
+                if (method.getAnnotation(RenderMe.class) != null && !method.getReturnType().equals(Void.TYPE) && method.getGenericParameterTypes().length == 0) {
+                    method.setAccessible(true);
+                    String withParam = method.getAnnotation(RenderMe.class).with();
+                    Object result = method.invoke(target);
+                    if (!withParam.equals("")) {
+                        //Custom Rendering
+                        Class varRenderer = Class.forName(withParam);
+                        Class implementedClass = varRenderer.getInterfaces()[0];
+                        if (implementedClass == CustomRenderTemplate.class) {
+                            try {
+                                Object innerTarget = varRenderer.getConstructor().newInstance();
+                                Method methode = varRenderer.getMethod("render", Object.class);
+                                innerOutput = (String) methode.invoke(innerTarget, result);
 
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchMethodException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+                    innerOutput = innerOutput.equals("") ? result.toString() : innerOutput;
+                    output += method.getName() + " (" + method.getReturnType().toString() + "): " + innerOutput + "\n";
                 }
-                innerOutput = innerOutput.equals("") ? result.toString() : innerOutput;
-                output += method.getName() + " (" + method.getReturnType().toString() + "): " + innerOutput + "\n";
-
             }
         }
+         catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         return output;
     }
 }
