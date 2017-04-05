@@ -24,7 +24,7 @@ public class ArrayRenderer implements CustomRenderTemplate {
      * @param value Object to be rendered
      * @return Object rendered to a string
      */
-    public String render(Object value){
+    public String render(Object value) {
         int length = Array.getLength(value);
         String output = "[";
         for (int i = 0; i < length; i++) {

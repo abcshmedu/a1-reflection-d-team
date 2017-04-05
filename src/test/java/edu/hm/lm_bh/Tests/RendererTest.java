@@ -13,22 +13,29 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Created by Lukas on 05.04.2017.
+ * Tests for the Renderer class.
+ * @author Lukas
+ * @author Heunke Sebastian, heunke@hm.edu
+ * @version 05.04.2017
  */
 @RunWith(Parameterized.class)
 public class RendererTest {
 
+    /**
+     * Collection of test inputs and results.
+     * Arrays containing the input parameters and the result expected.
+     * @return collection filled with arrays usable for tests
+     */
     @Parameterized.Parameters
-    public static Collection<Object[]> data()
-    {
-        return Arrays.asList(new Object[][]{{new ClassA() , "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassA:\n"
-                + "myNumber (int): 4\n"} , {new ClassB(),"Instance of edu.hm.lm_bh.Tests.RendererTest.ClassB:\n"
-                + "myArray (class [I): [0,42,0]\n"}, {new ClassC(),"Instance of edu.hm.lm_bh.Tests.RendererTest.ClassC:\n"
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{{new ClassA(), "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassA:\n"
+                + "myNumber (int): 4\n"}, {new ClassB(), "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassB:\n"
+                + "myArray (class [I): [0,42,0]\n"}, {new ClassC(), "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassC:\n"
                 + "myNumber (int): 4\n"
                 + "myArray (class [I): [42,1,2]\n"
                 + "myString (class java.lang.String): test String, pls ignore\n"
-                + "myStrings (class [Ljava.lang.String;): [StringArray]\n" }, {new ClassD(),"Instance of edu.hm.lm_bh.Tests.RendererTest.ClassD:\n"
-                + "aMethod (int): 42\n"}, {new ClassE(),"Instance of edu.hm.lm_bh.Tests.RendererTest.ClassE:\n"
+                + "myStrings (class [Ljava.lang.String;): [StringArray]\n"}, {new ClassD(), "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassD:\n"
+                + "aMethod (int): 42\n"}, {new ClassE(), "Instance of edu.hm.lm_bh.Tests.RendererTest.ClassE:\n"
                 + "arrayMethod (class [I): [42,42,42,42]\n"
                 + "aMethod (class java.lang.String): Hello there!\n"}});
 
@@ -37,14 +44,23 @@ public class RendererTest {
     private Renderer input;
     private String output;
 
+    /**
+     * Constructor used to intialize the variables.
+     * @param input Object used in the test
+     * @param output expected result
+     */
     public RendererTest(Object input, String output) {
         this.input = new Renderer(input);
         this.output = output;
     }
+
+    /**
+     * Renderer testing method.
+     * Takes the input and expected arrays and compares them.
+     */
     @Test
-    public void test()
-    {
-        assertEquals(input.render(),output);
+    public void test() {
+        assertEquals(input.render(), output);
     }
 
     //Classes to be used in later Tests
@@ -83,17 +99,40 @@ public class RendererTest {
      * Test class with a single method.
      */
     private static class ClassD {
+        private static final int NUM = 42;
+
+        /**
+         * Test method.
+         * @return a int
+         */
         @RenderMe
-        public int aMethod(){return 42;}
+        public int aMethod() {
+            return NUM;
+        }
     }
 
     /**
      * Test class with a multiple methods.
      */
     private static class ClassE {
+        private static final int NUM = 42;
+
+        /**
+         * Test method.
+         * @return a String
+         */
         @RenderMe
-        private String aMethod(){return "Hello there!";}
+        private String aMethod() {
+            return "Hello there!";
+        }
+
+        /**
+         * Method used for testing.
+         * @return some Array
+         */
         @RenderMe(with = "edu.hm.lm_bh.ArrayRenderer")
-        private int[] arrayMethod(){return new int[]{42,42,42,42};}
+        private int[] arrayMethod() {
+            return new int[]{NUM, NUM, NUM, NUM};
+        }
     }
 }

@@ -4,25 +4,27 @@ import edu.hm.lm_bh.RenderMe;
 import edu.hm.lm_bh.Renderer;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
- * Created by Lukas on 05.04.2017.
+ * Tests throwing expections for the Renderer class.
+ * @author Lukas
+ * @author Heunke Sebastian, heunke@hm.edu
+ * @version 05.04.2017
  */
 public class RendererExceptionTest {
+    /**
+     * Test checking for a exception thrown.
+     */
     @Test(expected = RuntimeException.class, timeout = 300)
-    public void testName() {
-        Renderer r = new Renderer(new ClassEx(3));
+    public void nonExistingRenderer() {
+        Renderer r = new Renderer(new ClassEx());
         r.render();
     }
 
-    private static class ClassEx
-    {
-        @RenderMe
-        private int a;
-
-        public ClassEx(int a) {
-            this.a = a;
-        }
+    /**
+     * Class used in test.
+     */
+    private static class ClassEx {
+        @RenderMe(with = "no.renderer.here")
+        private int a = 0;
     }
 }
