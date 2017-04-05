@@ -34,58 +34,80 @@ public class Renderer {
      */
     @SuppressWarnings("unchecked")
     public String render() {
-        String output = new String();
+        String output;
         try {
             Class targetClass = target.getClass();
             output = "Instance of " + targetClass.getCanonicalName() + ":\n"; //First line
-
-            for (Field field : targetClass.getDeclaredFields()) {
-                String innerOutput = ""; //Reset innerOutput
-                if (field.getAnnotation(RenderMe.class) != null) {
-                    field.setAccessible(true); //disable private
-                    String withParam = field.getAnnotation(RenderMe.class).with();
-                    if (!withParam.equals("")) {
-                        //Custom Rendering
-                        Class varRenderer = Class.forName(withParam);
-                        Class implementedClass = varRenderer.getInterfaces()[0];
-                        if (implementedClass == CustomRenderTemplate.class) {
-
-                            Object innerTarget = varRenderer.getConstructor().newInstance();
-                            Method methode = varRenderer.getMethod("render", Object.class);
-                            innerOutput = (String) methode.invoke(innerTarget, field.get(target));
-                        }
-                    }
-                    Object o = field.get(target);
-                    innerOutput = innerOutput.equals("") ? o.toString() : innerOutput;
-                    output += field.getName() + " (" + field.getGenericType().toString() + "): " + innerOutput + "\n";
-                }
-            }
-
-            for (Method method : targetClass.getDeclaredMethods()) {
-                String innerOutput = "";
-                if (method.getAnnotation(RenderMe.class) != null && !method.getReturnType().equals(Void.TYPE) && method.getGenericParameterTypes().length == 0) {
-                    method.setAccessible(true);
-                    String withParam = method.getAnnotation(RenderMe.class).with();
-                    Object result = method.invoke(target);
-                    if (!withParam.equals("")) {
-                        //Custom Rendering
-                        Class varRenderer = Class.forName(withParam);
-                        Class implementedClass = varRenderer.getInterfaces()[0];
-                        if (implementedClass == CustomRenderTemplate.class) {
-
-                            Object innerTarget = varRenderer.getConstructor().newInstance();
-                            Method methode = varRenderer.getMethod("render", Object.class);
-                            innerOutput = (String) methode.invoke(innerTarget, result);
-                        }
-                    }
-                    innerOutput = innerOutput.equals("") ? result.toString() : innerOutput;
-                    output += method.getName() + " (" + method.getReturnType().toString() + "): " + innerOutput + "\n";
-                }
-            }
+            output += renderFields();
+            output += renderMethods();
         } catch (Exception e) {
             throw new RuntimeException(e.getCause());
         }
 
         return output;
+    }
+
+    /**
+     * Renders all annotated fields of the target into a String.
+     *
+     * @return rendered readable String.
+     * @throws Exception When custom rendereer is not found
+     */
+    private String renderFields() throws Exception {
+        String result = "";
+        for (Field field : target.getClass().getDeclaredFields()) {
+            String innerOutput = ""; //Reset innerOutput
+            if (field.getAnnotation(RenderMe.class) != null) {
+                field.setAccessible(true); //disable private
+                String withParam = field.getAnnotation(RenderMe.class).with();
+                if (!withParam.equals("")) {
+                    //Custom Rendering
+                    Class varRenderer = Class.forName(withParam);
+                    Class implementedClass = varRenderer.getInterfaces()[0];
+                    if (implementedClass == CustomRenderTemplate.class) {
+
+                        Object innerTarget = varRenderer.getConstructor().newInstance();
+                        Method methode = varRenderer.getMethod("render", Object.class);
+                        innerOutput = (String) methode.invoke(innerTarget, field.get(target));
+                    }
+                }
+                Object o = field.get(target);
+                innerOutput = innerOutput.equals("") ? o.toString() : innerOutput;
+                result += field.getName() + " (" + field.getGenericType().toString() + "): " + innerOutput + "\n";
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Renders all annotated methods of the target into a String.
+     *
+     * @return rendered readable String.
+     * @throws Exception When custom rendereer is not found
+     */
+    private String renderMethods() throws Exception {
+        String resultString = "";
+        for (Method method : target.getClass().getDeclaredMethods()) {
+            String innerOutput = "";
+            if (method.getAnnotation(RenderMe.class) != null && !method.getReturnType().equals(Void.TYPE) && method.getGenericParameterTypes().length == 0) {
+                method.setAccessible(true);
+                String withParam = method.getAnnotation(RenderMe.class).with();
+                Object result = method.invoke(target);
+                if (!withParam.equals("")) {
+                    //Custom Rendering
+                    Class varRenderer = Class.forName(withParam);
+                    Class implementedClass = varRenderer.getInterfaces()[0];
+                    if (implementedClass == CustomRenderTemplate.class) {
+
+                        Object innerTarget = varRenderer.getConstructor().newInstance();
+                        Method methode = varRenderer.getMethod("render", Object.class);
+                        innerOutput = (String) methode.invoke(innerTarget, result);
+                    }
+                }
+                innerOutput = innerOutput.equals("") ? result.toString() : innerOutput;
+                resultString += method.getName() + " (" + method.getReturnType().toString() + "): " + innerOutput + "\n";
+            }
+        }
+        return resultString;
     }
 }
