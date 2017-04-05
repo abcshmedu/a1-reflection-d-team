@@ -70,18 +70,10 @@ public class Renderer {
                         Class varRenderer = Class.forName(withParam);
                         Class implementedClass = varRenderer.getInterfaces()[0];
                         if (implementedClass == CustomRenderTemplate.class) {
-                            try {
+
                                 Object innerTarget = varRenderer.getConstructor().newInstance();
                                 Method methode = varRenderer.getMethod("render", Object.class);
                                 innerOutput = (String) methode.invoke(innerTarget, result);
-
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchMethodException e) {
-                                e.printStackTrace();
-                            }
                         }
                     }
                     innerOutput = innerOutput.equals("") ? result.toString() : innerOutput;
@@ -89,16 +81,8 @@ public class Renderer {
                 }
             }
         }
-         catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+         catch (Exception e) {
+           throw new RuntimeException(e.getCause());
         }
 
         return output;
